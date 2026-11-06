@@ -454,7 +454,7 @@ body.loading .topbar::after{
 </head>
 <body>
 <div class="app" id="app">
-  <canvas id="sky" aria-label="记忆星系三维星图：拖拽旋转，滚轮缩放，双击聚焦记忆节点"></canvas>
+  <canvas id="sky" aria-label="记忆星系三维图：拖拽旋转，滚轮缩放，双击聚焦记忆节点"></canvas>
   <div class="vignette" aria-hidden="true"></div>
 
   <header class="topbar">
@@ -469,7 +469,7 @@ body.loading .topbar::after{
       <span><b id="nodeCount">0</b> 节点</span>
       <span class="sep" aria-hidden="true"></span>
       <span><b id="linkCount">0</b> 连线</span>
-      <button class="api-state" id="apiState" type="button" data-kind="loading" title="星图接口状态">
+      <button class="api-state" id="apiState" type="button" data-kind="loading" title="记忆星系接口状态">
         <span class="led" aria-hidden="true"></span><span id="apiText">连接中</span>
       </button>
     </div>
@@ -485,7 +485,7 @@ body.loading .topbar::after{
       <button class="btn ghost" id="mascotReset" type="button" title="立绘回到默认位置（也可以双击立绘）" aria-label="复位立绘位置" hidden>
         <span aria-hidden="true">↺</span><span class="btn-label">复位立绘</span>
       </button>
-      <button class="btn" id="refreshBtn" type="button" title="重新读取星图 (R)" aria-label="刷新星图">
+      <button class="btn" id="refreshBtn" type="button" title="重新读取记忆星系 (R)" aria-label="刷新记忆星系">
         <span class="spin" aria-hidden="true">↻</span><span class="btn-label">刷新</span>
       </button>
       <a class="btn ghost" href="/" title="返回控制台">
@@ -528,13 +528,13 @@ body.loading .topbar::after{
       <div class="modal-orb" aria-hidden="true"></div>
       <p class="eyebrow">CONSOLE LINK</p>
       <h2 id="loginTitle">先在控制台登录</h2>
-      <p>星图接口需要控制台令牌。把 <code>consoleToken</code> 贴进来，或回到控制台登录后再打开这一页。</p>
+      <p>记忆星系接口需要控制台令牌。把 <code>consoleToken</code> 贴进来，或回到控制台登录后再打开这一页。</p>
       <label class="sr-only" for="tokenInput">控制台令牌</label>
       <input id="tokenInput" type="password" placeholder="粘贴 consoleToken" autocomplete="off" spellcheck="false">
       <p class="hint" id="loginHint" role="alert"></p>
       <div class="modal-actions">
         <a class="btn ghost" href="/">回控制台</a>
-        <button class="btn primary" id="tokenSave" type="button">保存并读取星图</button>
+        <button class="btn primary" id="tokenSave" type="button">保存并读取记忆星系</button>
       </div>
     </div>
   </div>
@@ -701,7 +701,7 @@ body.loading .topbar::after{
     state.status = kind;
     dom.apiState.dataset.kind = kind;
     dom.apiText.textContent = text;
-    dom.apiState.title = title || ('星图接口状态：' + text);
+    dom.apiState.title = title || ('记忆星系接口状态：' + text);
     dom.apiState.setAttribute('aria-label', '接口状态：' + text);
   }
 
@@ -924,7 +924,7 @@ body.loading .topbar::after{
     state.loading = true;
     document.body.classList.add('loading');
     dom.refreshBtn.classList.add('busy');
-    if (!state.nodes.length) setApiState('loading', '连接中', '正在读取星图与情绪接口');
+    if (!state.nodes.length) setApiState('loading', '连接中', '正在读取记忆星系与情绪接口');
     var results;
     try {
       results = await Promise.all([
@@ -954,10 +954,10 @@ body.loading .topbar::after{
       }
       if (isOk(ores)) state.overview = ores.data;
       if (galaxyOk) {
-        setApiState('ready', '已连接', '星图接口已连接' + (state.emotionError ? '；情绪接口：' + state.emotionError : ''));
+        setApiState('ready', '已连接', '记忆星系接口已连接' + (state.emotionError ? '；情绪接口：' + state.emotionError : ''));
       } else {
         setApiState('error', state.nodes.length ? '刷新失败' : '接口未就绪',
-          '星图接口：' + state.galaxyError + (state.nodes.length ? '；保留上次的星图。' : ''));
+          '记忆星系接口：' + state.galaxyError + (state.nodes.length ? '；保留上次的记忆星系。' : ''));
       }
       if (state.searchQuery) applySearch(state.searchQuery, { fly: false });
       updateCounts();
@@ -965,11 +965,11 @@ body.loading .topbar::after{
       renderPanel();
       if (manual) {
         if (galaxyOk) {
-          toast('星图已刷新 · ' + state.nodes.length + ' 颗记忆星 / ' + state.links.length + ' 条连线');
+          toast('记忆星系已刷新 · ' + state.nodes.length + ' 颗记忆星 / ' + state.links.length + ' 条连线');
         } else if (state.nodes.length) {
-          toast('星图刷新失败：' + state.galaxyError + '；已保留上次的星图。', true);
+          toast('记忆星系刷新失败：' + state.galaxyError + '；已保留上次的记忆星系。', true);
         } else {
-          toast('星图接口未就绪：' + state.galaxyError, true);
+          toast('记忆星系接口未就绪：' + state.galaxyError, true);
         }
       }
     } finally {
@@ -1005,7 +1005,7 @@ body.loading .topbar::after{
     var vl = visibleLinkCount();
     dom.nodeCount.textContent = fmtInt(vn);
     dom.linkCount.textContent = fmtInt(vl);
-    dom.nodeCount.title = total ? ('星图显示 ' + vn + ' / ' + total + ' 颗记忆') : '星图还没有节点';
+    dom.nodeCount.title = total ? ('记忆星系显示 ' + vn + ' / ' + total + ' 颗记忆') : '记忆星系还没有节点';
     dom.linkCount.title = '共 ' + state.links.length + ' 条关系，当前显示 ' + vl + ' 条';
     var title = state.searchQuery
       ? '记忆星系 · 搜索「' + state.searchQuery.slice(0, 18) + '」'
@@ -1083,7 +1083,7 @@ body.loading .topbar::after{
       if (state.galaxyError && !state.loading) {
         dom.emptyState.hidden = false;
         dom.emptyCta.hidden = false;
-        dom.emptyTitle.textContent = '星图暂时没有连上';
+        dom.emptyTitle.textContent = '记忆星系暂时没有连上';
         dom.emptyText.textContent = '记忆接口还没就绪（' + state.galaxyError + '）。星尘还在，可以点刷新再试一次。';
         dom.emptyCta.textContent = '重新读取';
         dom.emptyCta.href = '#';
@@ -1280,7 +1280,7 @@ body.loading .topbar::after{
       right = make('span', '', '刷新 ' + fmtClock(state.lastRefresh));
       try { right.title = new Date(state.lastRefresh).toLocaleString('zh-CN'); } catch (e) {}
     } else {
-      right = make('span', '', state.galaxyError ? '星图未连接' : '尚未刷新');
+      right = make('span', '', state.galaxyError ? '记忆星系未连接' : '尚未刷新');
       if (state.galaxyError) right.title = state.galaxyError;
     }
     foot.appendChild(left);
@@ -1361,13 +1361,13 @@ body.loading .topbar::after{
       if (state.emotionError) {
         var err = make('div', 'panel-empty');
         err.appendChild(make('strong', '', '情绪接口暂不可用'));
-        err.appendChild(document.createTextNode(state.emotionError + '。星图不受影响，稍后刷新试试。'));
+        err.appendChild(document.createTextNode(state.emotionError + '。记忆星系不受影响，稍后刷新试试。'));
         frag.appendChild(err);
       } else {
         var load = make('div', 'panel-empty');
         var dot = make('strong', '', '正在读取她的情绪…');
         load.appendChild(dot);
-        load.appendChild(document.createTextNode('星图仍在点亮。'));
+        load.appendChild(document.createTextNode('记忆星系仍在点亮。'));
         frag.appendChild(load);
         var sk = make('div', 'skeleton');
         sk.style.height = '68px';
@@ -2103,7 +2103,7 @@ body.loading .topbar::after{
     try { localStorage.setItem(TOKEN_KEY, t); } catch (e) {}
     state.token = t;
     hideLogin();
-    toast('令牌已保存，正在读取星图…');
+    toast('令牌已保存，正在读取记忆星系…');
     loadAll(true);
   }
 

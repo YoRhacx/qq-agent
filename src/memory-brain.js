@@ -1574,7 +1574,7 @@ export function openMemoryBrain(options = {}) {
 
   /**
    * 一段对话的分量按「聊了多少条」算：3 条 ≈ 0.30、12 条 ≈ 0.55，再多封顶 0.55。
-   * 短摘要本来就信息少，别跟聊了一晚上的记忆平起平坐（检索排位和星图大小都吃这个值）。
+   * 短摘要本来就信息少，别跟聊了一晚上的记忆平起平坐（检索排位和星系里的星点大小都吃这个值）。
    */
   function episodeImportance(messageCount) {
     const n = Math.max(1, Number(messageCount) || 1);
@@ -1895,7 +1895,7 @@ export function openMemoryBrain(options = {}) {
   }
 
   /**
-   * 记忆星系：把每条记忆的向量投到三维（x/y/z 归一到 -1..1），给 public/galaxy.html 的星图画。
+   * 记忆星系：把每条记忆的向量投到三维（x/y/z 归一到 -1..1），给 public/galaxy.html 的「记忆星系」画。
    * 坐标在服务端算好，换投影算法不用动前端。
    */
   function galaxy(opts = {}) {

@@ -7,6 +7,8 @@
 - 是：一个 DSH 插件（`dsh-xingxi@0.2.5`，装在 `C:\Users\testuser\.dsh\profiles\desktop\` 的 profile bundles 里），提供侧栏「星图」面板、两个工具（`xingxi` 整本读、`xingxi_read` 按关键词/日期/文件读）和一个 `/xingxi` 斜杠指令。
 - 星图怎么长：一颗星 = 记忆卡里的一条，或一篇日记；中间最亮的是记忆卡第一章第一条，八章各成一团星群，罕见的词之间连细线，越新越亮。
 - **不是**：不是注入块，不写 `state/memory-brain.sqlite`，不进她的 system prompt。她的长期记忆仍走 memory-brain（五类记忆 + 衰减 + 检索），两边互不干扰。
+- **别跟控制台那页搞混**：桥接控制台里的 `/galaxy`（[`public/galaxy.html`](../../public/galaxy.html)，标题「记忆星系 · Memory Galaxy」）画的是 **memory-brain 的 SQLite 记忆**（五类记忆，随聊天增长，通常几十到上百颗）；本页说的「星图」是 DSH 侧栏插件画的 **记忆卡 + 日记档案**（人为整理的叙述，颗数固定）。
+  一句话：**记忆星系 = 她自己攒的记忆；星图 = 你整理给她的档案。** 两者只读、互不写入，数字对不上是正常的。
 
 ## 2. 档案在哪
 

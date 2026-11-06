@@ -69,7 +69,7 @@ score = 0.18 * semantic   语义（1024 维向量余弦）
 | 手动 | `POST /api/memory-brain/action {action:'consolidate'}` | 立刻把「聊完但没满窗口」的会话全结掉（控制台「记忆大脑 → 治理 → 立刻总结」） |
 
 **episode 的重要度按条数缩放**：`0.30`（3 条）→ `0.55`（12 条封顶），不再一律 0.45。
-短摘要排位靠后、星图上更暗，检索时不会盖过大段对话。
+短摘要排位靠后、记忆星系里更暗，检索时不会盖过大段对话。
 | 每天一次（启动后 + 24h 定时） | `distillFacts()`：从当天的 episode 抽 `fact` | 最多 `distill.factPerDay` 条（默认 6） |
 | 每天一次 | `distillLessons()`：从 `reflection` / 带「记错了/不是这样」的笔记抽 `lesson` | 最多 `distill.lessonPerDay` 条（默认 3） |
 | 手动 | `POST /api/memory-brain/action {action:'distill'}` | 立刻跑一次上面两步 |
