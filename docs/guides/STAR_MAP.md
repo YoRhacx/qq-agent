@@ -1,16 +1,16 @@
-# 星汐：把记忆画成星图（展示层）
+# 星图：把记忆画成星系（展示层）
 
 > 一句话：**dsh-xingxi** 插件把我们攒下的「记忆卡 + 日记」画成一张星图，给主人看；它不参与她的提示词，不是第二套记忆。
 
 ## 1. 它是什么、不是什么
 
-- 是：一个 DSH 插件（`dsh-xingxi@0.2.5`，装在 `C:\Users\testuser\.dsh\profiles\desktop\` 的 profile bundles 里），提供侧栏「星汐」面板、两个工具（`xingxi` 整本读、`xingxi_read` 按关键词/日期/文件读）和一个 `/xingxi` 斜杠指令。
+- 是：一个 DSH 插件（`dsh-xingxi@0.2.5`，装在 `C:\Users\testuser\.dsh\profiles\desktop\` 的 profile bundles 里），提供侧栏「星图」面板、两个工具（`xingxi` 整本读、`xingxi_read` 按关键词/日期/文件读）和一个 `/xingxi` 斜杠指令。
 - 星图怎么长：一颗星 = 记忆卡里的一条，或一篇日记；中间最亮的是记忆卡第一章第一条，八章各成一团星群，罕见的词之间连细线，越新越亮。
 - **不是**：不是注入块，不写 `state/memory-brain.sqlite`，不进她的 system prompt。她的长期记忆仍走 memory-brain（五类记忆 + 衰减 + 检索），两边互不干扰。
 
 ## 2. 档案在哪
 
-本机档案模式（不按会话绑文件夹——桥接会建/退会话，绑了就会散），两个路径写死在星汐自己的配置里：
+本机档案模式（不按会话绑文件夹——桥接会建/退会话，绑了就会散），两个路径写死在星图自己的配置里：
 
 - 配置：`C:\Users\testuser\.dsh\xingxi\config.json`
   ```json

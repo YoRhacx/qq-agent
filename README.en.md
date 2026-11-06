@@ -1,5 +1,12 @@
 # QQ ↔ DeepSeek Harness Bridge (qq-bridge)
 
+> 🧬 **This project is a heavily extended derivative of [`Derpyu520/qq-bridge`](https://github.com/Derpyu520/qq-bridge)**:
+> the upstream DSH protocol layer (offline-minted session cookie, `/api/remote.mux` event stream, session/tool approvals,
+> reconnect-safe event pump) is the foundation; this repo rebuilds a lot on top of it — persona card injection (two
+> message-splitting generations, inject limits), a six-tier memory system (episode/fact/reflection/skill/lesson),
+> PAD emotion and a life loop, a local web console, memory-galaxy / star-map visualisation, voice and music cards,
+> group administration and proactive wake-ups. Historical releases (and the project intro video) live in the upstream repo.
+
 > Connect QQ messages to DeepSeek Harness (DSH) agents: QQ friends/groups become DSH conversations, and agent replies (including questions and tool approvals) are sent back to QQ.
 
 > ⚠️ **Current release `v0.2.0`, targets DSH 0.2.0-rc.2** (verified item by item on that version; run `npm run verify:adaptation`). It uses the persistent local signing key to **mint the session Cookie offline**, slash RPC endpoints and the `/api/remote.mux` event stream — a protocol generation introduced in DSH `0.1.2-alpha.1`, incompatible with the older dot-endpoint protocol. Reading the launch token out of the old guard logs has not worked since DSH 0.1.7 (the token is generated per process and never written to disk). Agent presets are `@deepseek-ai/dsh-agent-preset` Cordis rows since DSH 0.1.7 (the `~/.dsh/.agent-presets/` directory mechanism is gone). On **DSH `0.1.1-rc.2` or earlier**, use tag [`v0.1.0`](https://github.com/Derpyu520/qq-bridge/releases/tag/v0.1.0); for **DSH 0.1.5-rc.1** use [`v0.1.5`](https://github.com/Derpyu520/qq-bridge/releases/tag/v0.1.5); for **DSH 0.1.7-rc.2** use [`v0.1.7`](https://github.com/Derpyu520/qq-bridge/releases/tag/v0.1.7).
