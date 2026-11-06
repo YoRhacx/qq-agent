@@ -1,0 +1,1950 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>记忆大脑 · QQ 桥接控制台</title>
+<link rel="icon" href="data:,">
+<script>
+// 主题引导与 console.html 完全一致：沿用同一个 localStorage key，两个页面主题保持同步。
+(function () {
+  var theme;
+  try {
+    var saved = localStorage.getItem('qq-console-theme');
+    theme = saved === 'dark' || saved === 'light' ? saved : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  } catch (error) {
+    theme = 'light';
+  }
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<style>
+/* ===== 变量照抄 public/console.html 的 :root（浅色）与 [data-theme="dark"] ===== */
+:root {
+  --bg:#f7f8fb;
+  --surface:#fff;
+  --surface-subtle:#fafbfe;
+  --surface-hover:#f5f6fa;
+  --surface-chip:#f6f8fc;
+  --surface-chip-strong:#e9edf5;
+  --card:#fff;
+  --topbar-bg:rgba(255,255,255,.96);
+  --card-border:#e4e9f1;
+  --border:#dfe4ed;
+  --border-input:#dce2ec;
+  --border-subtle:#edf0f5;
+  --border-strong:#d1d8e5;
+  --text:#202635;
+  --text-strong:#293044;
+  --text-secondary:#5f6a7d;
+  --label:#566174;
+  --muted:#5d6878;
+  --muted-soft:#828da1;
+  --placeholder:#929bad;
+  --icon:#77839a;
+  --eyebrow:#8995af;
+  --accent:#4d6bfe;
+  --accent-hover:#405de5;
+  --accent-soft-bg:#edf1ff;
+  --accent-soft-fg:#405ee6;
+  --accent-soft-fg-muted:#687cb9;
+  --accent-border-soft:#c8d4ff;
+  --accent-border-soft-hover:#bdc8e9;
+  --accent-ring:#4d6bfe0c;
+  --danger:#fff5f4;
+  --danger-border:#f1d4d1;
+  --danger-hover-bg:#ffebe8;
+  --err:#bd3b3b;
+  --ok:#168467;
+  --pill-blue-bg:#edf1ff;
+  --pill-blue-fg:#435de0;
+  --pill-green-bg:#eaf7f1;
+  --pill-green-fg:#22775f;
+  --pill-red-bg:#fff0ed;
+  --pill-red-fg:#b64a3e;
+  --pill-violet-bg:#f1ecff;
+  --pill-violet-fg:#6a45d6;
+  --warn-bg:#fff8ee;
+  --warn-border:#f3d6ad;
+  --warn-fg:#8e652a;
+  --dot-idle:#86a19a;
+  --dot-offline:#a1aab9;
+  --focus-ring:#a7b5ff;
+  --toast-bg:#27334a;
+  --toast-fg:#fff;
+  --overlay:#202e4966;
+  --shadow-card:0 1px 2px #172d5108,0 10px 28px #172d5108;
+  --shadow-pop:0 15px 45px #26366b1c;
+  --shadow-log:0 6px 30px #23365a26;
+  --radius:16px;
+  --chart-semantic:#4d6bfe;
+  --chart-keyword:#1f9e7a;
+  --chart-graph:#c0722a;
+  --chart-importance:#8a5cf6;
+  --chart-freshness:#2f8fd0;
+  --graph-1:#4d6bfe;
+  --graph-2:#1f9e7a;
+  --graph-3:#c0722a;
+  --graph-4:#8a5cf6;
+  --graph-5:#2f8fd0;
+  --graph-6:#c94f8e;
+  color-scheme:light;
+}
+[data-theme="dark"] {
+  --bg:#0d1016;
+  --surface:#161b24;
+  --surface-subtle:#191f29;
+  --surface-hover:#1e2532;
+  --surface-chip:#1c222d;
+  --surface-chip-strong:#242b39;
+  --card:#161b24;
+  --topbar-bg:rgba(17,22,30,.9);
+  --card-border:#252d3c;
+  --border:#2a3342;
+  --border-input:#2e3748;
+  --border-subtle:#212836;
+  --border-strong:#3b465c;
+  --text:#e7ebf3;
+  --text-strong:#f3f6fb;
+  --text-secondary:#aeb8ca;
+  --label:#9ca7ba;
+  --muted:#8d98ac;
+  --muted-soft:#7e8899;
+  --placeholder:#6d7789;
+  --icon:#95a1b6;
+  --eyebrow:#7f8ca4;
+  --accent:#6b86ff;
+  --accent-hover:#8098ff;
+  --accent-soft-bg:#1b2440;
+  --accent-soft-fg:#aabaff;
+  --accent-soft-fg-muted:#8b9bd4;
+  --accent-border-soft:#35426e;
+  --accent-border-soft-hover:#3d4b7d;
+  --accent-ring:#6b86ff1f;
+  --danger:#2b1a1c;
+  --danger-border:#4b2b2e;
+  --danger-hover-bg:#3a2120;
+  --err:#ff8f84;
+  --ok:#4fd1a5;
+  --pill-blue-bg:#1b2440;
+  --pill-blue-fg:#aabaff;
+  --pill-green-bg:#12291f;
+  --pill-green-fg:#5fd8ad;
+  --pill-red-bg:#2c1a1a;
+  --pill-red-fg:#ff9a91;
+  --pill-violet-bg:#241d3d;
+  --pill-violet-fg:#b3a1ff;
+  --warn-bg:#2a2113;
+  --warn-border:#4d3c1c;
+  --warn-fg:#e9b96c;
+  --dot-idle:#4c5a57;
+  --dot-offline:#4b5466;
+  --focus-ring:#5f7cff;
+  --toast-bg:#e9edf6;
+  --toast-fg:#111623;
+  --overlay:#04070ccc;
+  --shadow-card:0 1px 2px #0006,0 14px 34px #00000047;
+  --shadow-pop:0 18px 50px #00000073;
+  --shadow-log:0 8px 34px #0000006b;
+  --chart-semantic:#6b86ff;
+  --chart-keyword:#4fd1a5;
+  --chart-graph:#e9b96c;
+  --chart-importance:#a98bff;
+  --chart-freshness:#5aa9e6;
+  --graph-1:#6b86ff;
+  --graph-2:#4fd1a5;
+  --graph-3:#e9b96c;
+  --graph-4:#a98bff;
+  --graph-5:#5aa9e6;
+  --graph-6:#e78bb6;
+  color-scheme:dark;
+}
+* { box-sizing:border-box }
+html { scroll-behavior:smooth }
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;
+  font-size:14px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+[hidden] { display:none!important }
+a { color:var(--accent); text-decoration:none }
+p { margin:0 }
+h1,h2,h3 { margin:0 }
+button,input,select,textarea { font:inherit }
+:focus-visible { outline:3px solid var(--focus-ring); outline-offset:2px }
+.sr-only {
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0,0,0,0);white-space:nowrap;border:0;
+}
+button {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:9px;
+  color:var(--text);
+  padding:9px 15px;
+  font-size:13px;
+  cursor:pointer;
+  transition:background .15s,border-color .15s,color .15s;
+}
+button:hover:not(:disabled) { background:var(--surface-hover); border-color:var(--accent-border-soft-hover) }
+button:disabled { opacity:.5; cursor:not-allowed }
+button.primary { background:var(--accent); border-color:var(--accent); color:#fff }
+button.primary:hover:not(:disabled) { background:var(--accent-hover); border-color:var(--accent-hover) }
+button.small { font-size:12px; padding:5px 9px; border-radius:7px }
+button.danger { background:var(--danger); border-color:var(--danger-border); color:var(--err) }
+button.danger:hover:not(:disabled) { background:var(--danger-hover-bg); border-color:var(--danger-border) }
+.icon-button {
+  width:34px;height:34px;padding:0;line-height:1;font-size:17px;border-radius:9px;
+  border:1px solid var(--card-border);color:var(--icon);background:var(--surface);
+}
+/* ===== 顶栏 ===== */
+.topbar {
+  position:sticky;top:0;z-index:30;
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  min-height:64px;padding:10px 28px;
+  background:var(--topbar-bg);
+  border-bottom:1px solid var(--card-border);
+  backdrop-filter:blur(12px);
+}
+.back {
+  font-size:12px;color:var(--muted);border:1px solid var(--card-border);
+  border-radius:8px;padding:5px 10px;background:var(--surface);white-space:nowrap;
+}
+.back:hover { background:var(--surface-hover); color:var(--text) }
+.brand { display:flex;align-items:center;gap:10px;color:var(--text-strong);font-size:19px;font-weight:650;letter-spacing:-.4px }
+.brand .mark { font-size:22px;line-height:1 }
+.brand small { display:block;font-size:10px;font-weight:400;color:var(--muted);letter-spacing:.2px;margin-top:-1px }
+.topbar-spacer { flex:1 1 20px }
+.topbar-meta { display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end;font-size:12px;color:var(--muted) }
+.status-badge { display:flex;align-items:center;gap:7px;white-space:nowrap }
+.status-badge:before { content:"";width:7px;height:7px;border-radius:50%;background:var(--dot-offline);transition:background .25s,box-shadow .25s }
+.status-badge.online:before { background:var(--ok);box-shadow:0 0 0 3px var(--pill-green-bg) }
+.status-badge.offline:before { background:var(--err);box-shadow:0 0 0 3px var(--pill-red-bg) }
+.db-size { color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums }
+/* ===== 主区 ===== */
+main { max-width:1514px;margin:0 auto;padding:24px 28px 56px;display:grid;gap:20px;min-width:0 }
+.card {
+  background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);
+  padding:22px;box-shadow:var(--shadow-card);min-width:0;
+}
+.card-head { display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px }
+.card-head h2 { font-size:15px;font-weight:600;letter-spacing:-.2px;display:flex;align-items:center;gap:8px }
+.card-head .hint { margin-left:auto;font-size:11px;color:var(--muted-soft);font-variant-numeric:tabular-nums }
+.card-head .hint strong { color:var(--text-secondary);font-weight:600 }
+/* 概览卡片 */
+.overview { display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;min-width:0 }
+.ov-card {
+  background:var(--card);border:1px solid var(--card-border);border-radius:12px;
+  padding:13px 15px;box-shadow:var(--shadow-card);min-width:0;
+}
+.ov-card .label { display:block;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis }
+.ov-card .value {
+  display:block;font-size:23px;font-weight:600;letter-spacing:-.6px;line-height:1.35;
+  margin:3px 0 2px;font-variant-numeric:tabular-nums;
+}
+.ov-card.duo .value { font-size:18px;letter-spacing:-.4px }
+.ov-card .sub { display:flex;justify-content:space-between;gap:6px;font-size:10px;color:var(--muted-soft);white-space:nowrap }
+.ov-card .sub b { font-weight:500;color:var(--text-secondary) }
+.track { height:5px;border-radius:3px;background:var(--surface-chip-strong);overflow:hidden;margin-top:7px }
+.track>i { display:block;height:100%;border-radius:3px;background:var(--accent);transition:width .3s ease }
+/* 工具条 */
+.toolbar { display:flex;gap:10px;flex-wrap:wrap;align-items:center }
+input[type=search],input[type=text],input[type=password],select {
+  background:var(--surface);border:1px solid var(--border-input);border-radius:8px;
+  padding:9px 11px;color:var(--text);font-size:13px;min-width:0;
+}
+input::placeholder { color:var(--placeholder) }
+input:focus,select:focus { outline:none;border-color:var(--focus-ring);box-shadow:0 0 0 3px var(--accent-ring) }
+.grow { flex:1 1 260px }
+/* 检索结果 */
+.results { margin-top:14px }
+.hit {
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,340px);gap:18px;
+  padding:12px 14px;border:1px solid var(--border-subtle);border-radius:10px;background:var(--surface-subtle);
+}
+.hit+.hit { margin-top:10px }
+.hit .meta { display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;font-size:11px;color:var(--muted-soft) }
+.hit .score { font-size:11px;font-weight:600;color:var(--accent-soft-fg);font-variant-numeric:tabular-nums }
+.hit .text {
+  font-size:13px;color:var(--text);overflow-wrap:anywhere;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+}
+.parts { display:grid;gap:5px }
+.part { display:grid;grid-template-columns:58px minmax(0,1fr) 38px;gap:8px;align-items:center;font-size:10px;color:var(--muted) }
+.part .track { height:6px;margin:0 }
+.part .val { text-align:right;font-variant-numeric:tabular-nums;color:var(--muted-soft) }
+.part.semantic .track>i { background:var(--chart-semantic) }
+.part.keyword .track>i { background:var(--chart-keyword) }
+.part.graph .track>i { background:var(--chart-graph) }
+.part.importance .track>i { background:var(--chart-importance) }
+.part.freshness .track>i { background:var(--chart-freshness) }
+/* 列表表格 */
+.table-wrap { border:1px solid var(--card-border);border-radius:10px;overflow:auto;max-height:560px;margin-top:14px }
+table { width:100%;border-collapse:collapse;font-size:12px;min-width:860px }
+thead th {
+  position:sticky;top:0;z-index:1;background:var(--surface-subtle);text-align:left;
+  font-size:11px;font-weight:600;color:var(--text-secondary);padding:9px 10px;
+  border-bottom:1px solid var(--card-border);white-space:nowrap;
+}
+tbody td { padding:8px 10px;border-bottom:1px solid var(--border-subtle);vertical-align:middle;color:var(--text-secondary) }
+tbody tr:last-child td { border-bottom:0 }
+tbody tr:hover td { background:var(--surface-hover) }
+td.txt { max-width:560px;min-width:220px }
+.row-text { color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:540px }
+.row-sub { font-size:10px;color:var(--muted-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:540px }
+td.num { font-variant-numeric:tabular-nums;white-space:nowrap }
+.ops-row { display:flex;gap:6px }
+.pager { display:flex;align-items:center;gap:10px;justify-content:flex-end;margin-top:12px;font-size:12px;color:var(--muted) }
+/* 通用徽章 */
+.pill { display:inline-block;padding:1px 7px;border-radius:6px;font-size:10px;line-height:1.7;background:var(--surface-chip-strong);color:var(--text-secondary);white-space:nowrap }
+.pill.k-episode { background:var(--pill-blue-bg);color:var(--pill-blue-fg) }
+.pill.k-fact { background:var(--pill-green-bg);color:var(--pill-green-fg) }
+.pill.k-reflection { background:var(--pill-violet-bg);color:var(--pill-violet-fg) }
+.pill.k-skill { background:var(--warn-bg);color:var(--warn-fg) }
+.pill.k-lesson { background:var(--surface-chip-strong);color:var(--muted) }
+.pill.st-active { background:var(--pill-green-bg);color:var(--pill-green-fg) }
+.pill.st-archived { background:var(--surface-chip-strong);color:var(--muted) }
+.pill.st-working { background:var(--pill-blue-bg);color:var(--pill-blue-fg) }
+/* 空态 / 错误 */
+.empty { padding:22px 12px;text-align:center;color:var(--muted-soft);font-size:12px }
+.empty b { display:block;color:var(--muted);font-weight:500;margin-bottom:3px;font-size:13px }
+td .empty { padding:16px 8px;text-align:left }
+/* 图谱 */
+.split { display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:20px;align-items:start;min-width:0 }
+.graph-wrap { position:relative;border:1px solid var(--card-border);border-radius:10px;background:var(--surface-subtle);overflow:hidden }
+#graphCanvas { display:block;width:100%;height:420px;cursor:crosshair }
+.graph-empty { position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;text-align:center;pointer-events:none }
+.graph-empty .empty { padding:0 }
+.graph-tip {
+  position:absolute;z-index:3;pointer-events:none;transform:translate(-50%,-140%);
+  background:var(--toast-bg);color:var(--toast-fg);font-size:11px;line-height:1.5;
+  padding:5px 9px;border-radius:7px;box-shadow:var(--shadow-pop);white-space:nowrap;
+}
+.legend { display:flex;flex-wrap:wrap;gap:10px 14px;margin-top:10px;font-size:11px;color:var(--muted) }
+.legend span { display:inline-flex;align-items:center;gap:5px;white-space:nowrap }
+.legend i { width:8px;height:8px;border-radius:50%;display:inline-block }
+/* 体检 */
+.health-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px }
+.health-item { border:1px solid var(--border-subtle);border-radius:10px;padding:10px 12px;background:var(--surface-subtle);min-width:0 }
+.health-item header { display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:var(--text-secondary) }
+.health-item strong { font-size:19px;font-weight:600;color:var(--text);letter-spacing:-.4px;font-variant-numeric:tabular-nums }
+.health-item strong.bad { color:var(--err) }
+.health-item ul { list-style:none;margin:6px 0 0;padding:0;display:grid;gap:3px }
+.health-item li { font-size:10.5px;color:var(--muted-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap }
+.health-item li:before { content:"·";margin-right:5px;color:var(--muted) }
+.card-actions { display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;align-items:center }
+/* 评估 */
+.metrics { display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px;margin-top:14px }
+.metric-tile { border:1px solid var(--border-subtle);border-radius:10px;padding:12px 14px;background:var(--surface-subtle);min-width:0 }
+.metric-tile span { display:block;font-size:11px;color:var(--muted) }
+.metric-tile strong { display:block;font-size:21px;font-weight:600;letter-spacing:-.5px;margin-top:2px;font-variant-numeric:tabular-nums }
+.metric-tile small { display:block;font-size:10px;color:var(--muted-soft);margin-top:1px }
+/* 治理 */
+.govern { display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px }
+.govern button { display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 14px;text-align:left;line-height:1.5 }
+.govern b { font-size:13px;font-weight:600 }
+.govern small { font-size:10.5px;color:var(--muted) }
+.govern button.danger small { color:var(--err);opacity:.85 }
+/* 顶部提示条 */
+.banner {
+  display:flex;gap:12px;align-items:flex-start;border-radius:12px;padding:12px 16px;
+  border:1px solid var(--card-border);background:var(--surface);font-size:12.5px;line-height:1.7;
+}
+.banner-icon { font-size:17px;line-height:1.5 }
+.banner strong { display:block;font-size:13px;font-weight:600;color:var(--text) }
+.banner p { color:var(--muted);font-size:12px;margin-top:2px }
+.banner.warn { background:var(--warn-bg);border-color:var(--warn-border) }
+.banner.warn strong { color:var(--warn-fg) }
+.banner.err { background:var(--danger);border-color:var(--danger-border) }
+.banner.err strong { color:var(--err) }
+.banner-actions { display:flex;gap:8px;flex-wrap:wrap;margin-top:8px }
+.banner-actions input { flex:1 1 200px;max-width:320px;font-size:12px;padding:6px 9px }
+/* 提示 / 弹窗 */
+.toast {
+  position:fixed;top:76px;left:50%;transform:translateX(-50%);z-index:1200;
+  max-width:min(680px,calc(100vw - 32px));padding:9px 16px;border-radius:10px;
+  background:var(--toast-bg);color:var(--toast-fg);font-size:12.5px;
+  box-shadow:var(--shadow-log);animation:toastIn .2s ease both;
+}
+.toast.error { background:var(--err);color:var(--surface) }
+.toast.ok { background:var(--ok);color:var(--surface) }
+@keyframes toastIn { from { opacity:0;transform:translate(-50%,-8px) } to { opacity:1;transform:translate(-50%,0) } }
+.overlay {
+  position:fixed;inset:0;z-index:1000;background:var(--overlay);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+}
+.dialog {
+  width:min(460px,100%);background:var(--card);border:1px solid var(--card-border);
+  border-radius:14px;box-shadow:var(--shadow-pop);padding:20px 22px;
+}
+.dialog h3 { font-size:16px;font-weight:600;margin-bottom:8px }
+.dialog p { color:var(--muted);font-size:12.5px;line-height:1.75;white-space:pre-wrap }
+.dialog .actions { display:flex;justify-content:flex-end;gap:10px;margin-top:18px }
+@media (max-width:1180px) {
+  .split { grid-template-columns:minmax(0,1fr) }
+}
+@media (max-width:820px) {
+  .topbar { padding:10px 16px }
+  main { padding:16px 16px 40px }
+  .card { padding:16px }
+  .hit { grid-template-columns:minmax(0,1fr) }
+  #graphCanvas { height:340px }
+}
+@media (prefers-reduced-motion:reduce) {
+  .toast { animation:none }
+  .track>i { transition:none }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="back" href="/console.html" title="回到 QQ 桥接控制台">← 控制台</a>
+  <div class="brand"><span class="mark" aria-hidden="true">🧠</span><span>记忆大脑<small>QQ BRIDGE / MEMORY</small></span></div>
+  <div class="topbar-spacer"></div>
+  <div class="topbar-meta">
+    <span class="status-badge" id="statusBadge"><span id="statusText">连接中…</span></span>
+    <span class="db-size" id="dbSize">库体积 —</span>
+    <button class="icon-button" id="refreshAll" type="button" aria-label="刷新全部数据" title="刷新全部数据">↻</button>
+    <button class="icon-button" id="themeToggle" type="button" aria-label="切换深色模式" aria-pressed="false" title="切换深色 / 浅色主题">☾</button>
+  </div>
+</header>
+
+<main id="mainContent">
+  <section id="banner" class="banner warn" role="status" hidden></section>
+
+  <section class="overview" id="overviewGrid" aria-label="记忆概览"></section>
+
+  <section class="card" aria-labelledby="searchTitle">
+    <div class="card-head">
+      <h2 id="searchTitle">🔎 检索</h2>
+      <span class="hint" id="searchSummary">输入关键词，看五段权重怎么给分</span>
+    </div>
+    <form class="toolbar" id="searchForm" autocomplete="off">
+      <input id="searchQuery" class="grow" type="search" placeholder="按语义 / 关键词检索记忆，例如「主人不喜欢被催」" aria-label="检索关键词">
+      <select id="searchChatType" aria-label="会话类型">
+        <option value="">全部会话</option>
+        <option value="private">私聊</option>
+        <option value="group">群聊</option>
+      </select>
+      <button class="primary" id="searchSubmit" type="submit">搜索</button>
+    </form>
+    <div class="results" id="searchResults"></div>
+  </section>
+
+  <section class="card" aria-labelledby="listTitle">
+    <div class="card-head">
+      <h2 id="listTitle">🗂 记忆列表</h2>
+      <span class="hint" id="listMeta">每页 20 条</span>
+    </div>
+    <div class="toolbar">
+      <select id="listKind" aria-label="按类型过滤">
+        <option value="">全部类型</option>
+        <option value="episode">情节 episode</option>
+        <option value="fact">事实 fact</option>
+        <option value="reflection">反思 reflection</option>
+        <option value="skill">技能 skill</option>
+        <option value="lesson">教训 lesson</option>
+      </select>
+      <select id="listStatus" aria-label="按状态过滤">
+        <option value="">全部状态</option>
+        <option value="active">活跃</option>
+        <option value="archived">已归档</option>
+        <option value="working">工作记忆</option>
+      </select>
+      <button class="small" id="listReload" type="button">重载</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">记忆内容</th>
+            <th scope="col">类型</th>
+            <th scope="col">重要度</th>
+            <th scope="col">访问</th>
+            <th scope="col">状态</th>
+            <th scope="col">创建时间</th>
+            <th scope="col">操作</th>
+          </tr>
+        </thead>
+        <tbody id="listBody"></tbody>
+      </table>
+    </div>
+    <div class="pager">
+      <span id="pageInfo">—</span>
+      <button class="small" id="listPrev" type="button">上一页</button>
+      <button class="small" id="listNext" type="button">下一页</button>
+    </div>
+  </section>
+
+  <div class="split">
+    <section class="card" aria-labelledby="graphTitle">
+      <div class="card-head">
+        <h2 id="graphTitle">🕸 记忆图谱</h2>
+        <span class="hint" id="graphMeta">节点大小 = 提及次数</span>
+      </div>
+      <div class="graph-wrap" id="graphWrap">
+        <canvas id="graphCanvas" aria-label="记忆实体关系力导向图，鼠标悬停查看名字"></canvas>
+        <div class="graph-tip" id="graphTip" hidden></div>
+        <div class="graph-empty" id="graphEmpty" hidden><div class="empty"><b>暂无图谱</b>记忆抽取后会在这里生成实体关系。</div></div>
+      </div>
+      <div class="legend" id="graphLegend"></div>
+    </section>
+
+    <section class="card" aria-labelledby="healthTitle">
+      <div class="card-head">
+        <h2 id="healthTitle">🩺 记忆体检</h2>
+        <span class="hint" id="healthMeta">每类最多 3 条样本</span>
+      </div>
+      <div class="health-grid" id="healthGrid"></div>
+      <div class="card-actions">
+        <button class="small" id="healthFix" type="button">🛠 一键修复</button>
+        <span class="hint" id="healthNote"></span>
+      </div>
+    </section>
+  </div>
+
+  <div class="split">
+    <section class="card" aria-labelledby="evalTitle">
+      <div class="card-head">
+        <h2 id="evalTitle">🎯 检索评估</h2>
+        <span class="hint" id="evalMeta">还没跑过评估</span>
+      </div>
+      <div class="metrics" id="evalMetrics"></div>
+      <div class="card-actions">
+        <button class="primary small" id="evalRun" type="button">跑一次评估</button>
+        <span class="hint">用内置用例回放，跑完看 recall@1 / recall@3 / MRR / p50</span>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="governTitle">
+      <div class="card-head">
+        <h2 id="governTitle">🧰 治理</h2>
+        <span class="hint" id="governMeta">每个动作都会二次确认</span>
+      </div>
+      <div class="govern" id="governActions">
+        <button type="button" data-govern="decay"><b>衰减一次</b><small>按时间衰减重要度，不改文本</small></button>
+        <button type="button" class="danger" data-govern="purge"><b>清理过期</b><small>永久删除过期记忆</small></button>
+        <button type="button" data-govern="merge"><b>相似合并</b><small>合并高相似度记忆</small></button>
+        <button type="button" data-govern="reindex"><b>重建索引</b><small>重建向量与关键词索引</small></button>
+        <button type="button" data-govern="consolidate"><b>立刻总结</b><small>把聊完还没满窗口的对话结成记忆（星系里长星）</small></button>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<div class="overlay" id="confirmOverlay" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" hidden>
+  <div class="dialog">
+    <h3 id="confirmTitle">确认操作</h3>
+    <p id="confirmMessage"></p>
+    <div class="actions">
+      <button type="button" id="confirmCancel">取消</button>
+      <button type="button" class="primary" id="confirmOk">确认</button>
+    </div>
+  </div>
+</div>
+
+<noscript><div class="banner err">本页需要启用 JavaScript 才能读取记忆数据。</div></noscript>
+
+<script>
+'use strict';
+(function () {
+  var TOKEN_KEY = 'consoleToken';
+  var PAGE_LIMIT = 20;
+  var GRAPH_LIMIT = 120;
+  var KINDS = [
+    { key: 'episode', label: '情节记忆' },
+    { key: 'fact', label: '事实记忆' },
+    { key: 'reflection', label: '反思记忆' },
+    { key: 'skill', label: '技能记忆' },
+    { key: 'lesson', label: '教训记忆' }
+  ];
+  var KIND_LABEL = { episode: '情节', fact: '事实', reflection: '反思', skill: '技能', lesson: '教训' };
+  var PART_KEYS = [
+    { key: 'semantic', label: '语义' },
+    { key: 'keyword', label: '关键词' },
+    { key: 'graph', label: '图谱' },
+    { key: 'importance', label: '重要度' },
+    { key: 'freshness', label: '新鲜度' }
+  ];
+  var HEALTH_KEYS = [
+    { key: 'duplicates', label: '重复' },
+    { key: 'orphans', label: '孤儿' },
+    { key: 'zombies', label: '僵尸' },
+    { key: 'conflicts', label: '冲突' }
+  ];
+  var GOVERN = {
+    decay: {
+      label: '衰减一次',
+      message: '将对全部记忆按时间做一次重要度衰减。\n只会改重要度分数，不会删除文本。',
+      ok: '衰减完成'
+    },
+    purge: {
+      label: '清理过期',
+      message: '将永久删除已经过期 / 长期未用的记忆条目。\n此操作不可撤销，确认继续？',
+      ok: '清理完成',
+      danger: true
+    },
+    merge: {
+      label: '相似合并',
+      message: '将把高相似度的记忆合并成一条，被合并的条目不一定会保留。\n建议先看一遍体检结果，确认继续？',
+      ok: '合并完成',
+      danger: true
+    },
+    reindex: {
+      label: '重建索引',
+      message: '将重建全部记忆的向量与关键词索引。\n重建期间检索可能短暂变慢。',
+      ok: '索引已重建'
+    },
+    consolidate: {
+      label: '立刻总结',
+      message: '把「已经聊完、但还没攒满 12 条」的会话立刻总结成记忆。\n只读原始消息、不删任何东西；一篇对话会变成一颗星。',
+      ok: '已总结'
+    }
+  };
+
+  var state = {
+    token: readToken(),
+    disabled: false,
+    overview: null,
+    list: { kind: '', status: '', offset: 0, total: 0, items: [] },
+    listError: '',
+    healthError: '',
+    emptyReason: '',
+    hits: [],
+    searchQuery: '',
+    health: null,
+    evaluation: null,
+    busy: false
+  };
+
+  /* ================= 小工具 ================= */
+  function $(id) { return document.getElementById(id); }
+
+  function el(tag, cls, text) {
+    var node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (text !== undefined && text !== null) node.textContent = String(text);
+    return node;
+  }
+
+  function num(value) {
+    var n = Number(value);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  function clamp(value, min, max) { return Math.min(max, Math.max(min, value)); }
+
+  function fmtInt(value) {
+    try { return num(value).toLocaleString('zh-CN'); } catch (error) { return String(num(value)); }
+  }
+
+  function fmtFloat(value, digits) {
+    var n = num(value);
+    var d = digits === undefined ? 3 : digits;
+    return n.toFixed(d);
+  }
+
+  function pct(ratio) { return (clamp(num(ratio), 0, 1) * 100).toFixed(1) + '%'; }
+
+  function fmtBytes(value) {
+    var n = num(value);
+    if (!(n > 0)) return '0 B';
+    var units = ['B', 'KB', 'MB', 'GB', 'TB'];
+    var i = 0;
+    while (n >= 1024 && i < units.length - 1) { n = n / 1024; i += 1; }
+    var shown = i === 0 ? String(Math.round(n)) : n.toFixed(n >= 10 ? 1 : 2);
+    return shown + ' ' + units[i];
+  }
+
+  function toDate(value) {
+    if (value === null || value === undefined || value === '') return null;
+    if (typeof value === 'number') return new Date(value < 1e12 ? value * 1000 : value);
+    var s = String(value).trim();
+    if (/^\d+(\.\d+)?$/.test(s)) {
+      var n = Number(s);
+      return new Date(n < 1e12 ? n * 1000 : n);
+    }
+    var t = Date.parse(s);
+    return Number.isFinite(t) ? new Date(t) : null;
+  }
+
+  function fmtTime(value) {
+    var d = toDate(value);
+    if (!d || Number.isNaN(d.getTime())) return '—';
+    function p(x) { return x < 10 ? '0' + x : String(x); }
+    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+  }
+
+  function readToken() {
+    try { return localStorage.getItem(TOKEN_KEY) || ''; } catch (error) { return ''; }
+  }
+
+  function kindPill(kind) {
+    var key = String(kind || '');
+    var pill = el('span', 'pill k-' + key, (KIND_LABEL[key] || key || '未知') + (key ? ' · ' + key : ''));
+    return pill;
+  }
+
+  function statusPill(status) {
+    var key = String(status || '');
+    var label = key === 'archived' ? '已归档' : key === 'working' ? '工作记忆' : key === 'active' ? '活跃' : (key || '—');
+    return el('span', 'pill st-' + (key || 'unknown'), label);
+  }
+
+  function emptyBlock(title, detail) {
+    var box = el('div', 'empty');
+    if (title) box.append(el('b', '', title));
+    if (detail) box.append(document.createTextNode(String(detail)));
+    return box;
+  }
+
+  function describeSample(item) {
+    if (item === null || item === undefined) return '（空）';
+    if (typeof item === 'string' || typeof item === 'number' || typeof item === 'boolean') return String(item);
+    if (Array.isArray(item)) {
+      var parts = item.map(function (x) {
+        if (x && typeof x === 'object') return String(x.text || x.id || x.name || '');
+        return String(x === null || x === undefined ? '' : x);
+      }).filter(Boolean);
+      return parts.join(' · ').slice(0, 160);
+    }
+    var keys = ['text', 'summary', 'reason', 'detail', 'title', 'id', 'name'];
+    for (var i = 0; i < keys.length; i += 1) {
+      var value = item[keys[i]];
+      if (value !== null && value !== undefined && String(value).length) return String(value).slice(0, 160);
+    }
+    try { return JSON.stringify(item).slice(0, 160); } catch (error) { return String(item); }
+  }
+
+  /* ================= toast / 弹窗 ================= */
+  var toastTimer = 0;
+  function toast(message, kind) {
+    var node = $('toast');
+    if (!node) return;
+    node.textContent = String(message || '');
+    node.className = 'toast' + (kind ? ' ' + kind : '');
+    node.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { node.hidden = true; }, 4600);
+  }
+
+  var confirmResolve = null;
+  function askConfirm(options) {
+    var overlay = $('confirmOverlay');
+    $('confirmTitle').textContent = options.title || '确认操作';
+    $('confirmMessage').textContent = options.message || '';
+    var ok = $('confirmOk');
+    ok.textContent = options.confirmText || '确认';
+    ok.className = options.danger ? 'danger' : 'primary';
+    overlay.hidden = false;
+    ok.focus();
+    return new Promise(function (resolve) { confirmResolve = resolve; });
+  }
+
+  function closeConfirm(result) {
+    var overlay = $('confirmOverlay');
+    if (!overlay || overlay.hidden) return;
+    overlay.hidden = true;
+    var resolve = confirmResolve;
+    confirmResolve = null;
+    if (resolve) resolve(result);
+  }
+
+  /* ================= 接口层 ================= */
+  function ApiError(message, extra) {
+    this.name = 'ApiError';
+    this.message = message;
+    this.code = (extra && extra.code) || '';
+    this.status = (extra && extra.status) || 0;
+  }
+  ApiError.prototype = Object.create(Error.prototype);
+  ApiError.prototype.constructor = ApiError;
+
+  function api(path, options) {
+    var opts = options || {};
+    var timeoutMs = Number(opts.timeoutMs) > 0 ? Number(opts.timeoutMs) : 20000;
+    var headers = {};
+    if (opts.body !== undefined && opts.body !== null) headers['content-type'] = 'application/json';
+    var token = readToken();
+    state.token = token;
+    if (token) headers['x-console-token'] = token;
+    return fetch(path, {
+      method: opts.method || 'GET',
+      headers: headers,
+      body: opts.body === undefined || opts.body === null ? undefined : JSON.stringify(opts.body),
+      cache: 'no-store',
+      credentials: 'same-origin',
+      signal: AbortSignal.timeout(timeoutMs)
+    }).then(function (res) {
+      return res.text().then(function (text) {
+        var data = null;
+        try { data = text ? JSON.parse(text) : null; } catch (error) { data = null; }
+        if (res.status === 401) {
+          showLoginBanner('令牌无效或已过期，请重新填一次控制台令牌。');
+          throw new ApiError('未授权：令牌无效或已过期', { status: 401, code: 'unauthorized' });
+        }
+        if (!res.ok) {
+          var detail = data && data.error ? '：' + data.error : (text ? '：' + text.slice(0, 120) : '');
+          throw new ApiError('接口 ' + path + ' 返回 HTTP ' + res.status + detail, { status: res.status, code: 'http' });
+        }
+        if (data === null) throw new ApiError('接口 ' + path + ' 返回的不是 JSON', { code: 'bad-json' });
+        if (data.ok === false) {
+          if (data.disabled) throw new ApiError('记忆大脑未开启', { code: 'disabled' });
+          throw new ApiError(data.error || '接口 ' + path + ' 返回失败', { code: 'failed' });
+        }
+        return data;
+      });
+    }, function (error) {
+      var timedOut = error && (error.name === 'TimeoutError' || error.name === 'AbortError');
+      throw new ApiError(timedOut
+        ? '接口 ' + path + ' 超过 ' + Math.round(timeoutMs / 1000) + ' 秒没有响应'
+        : '接口 ' + path + ' 请求失败：' + (error && error.message ? error.message : error), { code: timedOut ? 'timeout' : 'network' });
+    });
+  }
+
+  /* ================= 顶栏 / banner ================= */
+  function setStatus(kind, text) {
+    var badge = $('statusBadge');
+    var label = $('statusText');
+    if (badge) {
+      badge.classList.toggle('online', kind === 'online');
+      badge.classList.toggle('offline', kind === 'offline');
+    }
+    if (label) label.textContent = text;
+  }
+
+  function renderChrome() {
+    var overview = state.overview;
+    var db = (overview && overview.db) || {};
+    var size = $('dbSize');
+    if (!state.token) {
+      setStatus('idle', '未登录');
+    } else if (state.disabled) {
+      setStatus('offline', '已关闭');
+    } else if (overview) {
+      setStatus('online', '已开启');
+    } else {
+      setStatus('idle', '连接中…');
+    }
+    if (size) {
+      if (overview && db.sizeBytes !== undefined && db.sizeBytes !== null) {
+        size.textContent = '库体积 ' + fmtBytes(db.sizeBytes);
+        size.title = db.path ? '数据库：' + db.path : '数据库路径未返回';
+      } else {
+        size.textContent = '库体积 —';
+        size.title = '数据库信息未返回';
+      }
+    }
+  }
+
+  function showBanner(kind, message) {
+    var banner = $('banner');
+    if (!banner) return;
+    banner.replaceChildren();
+    banner.hidden = false;
+    banner.className = 'banner ' + (kind === 'disabled' ? 'err' : 'warn');
+    if (kind === 'disabled') {
+      banner.append(el('span', 'banner-icon', '⛔'));
+      var body = el('div');
+      body.append(el('strong', '', '记忆大脑未开启（config.memoryBrain.enabled=false）'));
+      body.append(el('p', '', '把 config.json 里 memoryBrain.enabled 设为 true，重启桥接后刷新本页即可看到数据；在此之前各区块显示空态。'));
+      banner.append(body);
+      return;
+    }
+    banner.append(el('span', 'banner-icon', '🔒'));
+    var loginBody = el('div');
+    loginBody.append(el('strong', '', '先在控制台登录'));
+    loginBody.append(el('p', '', message || '本页要用控制台令牌（x-console-token）读数据。如果在控制台已经登录，刷新本页即可；也可以把令牌粘在下面（只存在本机浏览器里）。'));
+    var row = el('div', 'banner-actions');
+    var input = el('input');
+    input.type = 'password';
+    input.id = 'bannerToken';
+    input.autocomplete = 'off';
+    input.placeholder = '粘贴控制台令牌（consoleToken）';
+    input.setAttribute('aria-label', '控制台令牌');
+    var save = el('button', 'small', '保存令牌');
+    save.type = 'button';
+    save.addEventListener('click', function () {
+      var value = input.value.trim();
+      if (!value) { toast('令牌不能为空', 'error'); return; }
+      try { localStorage.setItem(TOKEN_KEY, value); } catch (error) { toast('浏览器拒绝保存令牌：' + error.message, 'error'); return; }
+      location.reload();
+    });
+    input.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') { event.preventDefault(); save.click(); }
+    });
+    row.append(input, save);
+    loginBody.append(row);
+    banner.append(loginBody);
+  }
+
+  function showLoginBanner(message) {
+    if (state.disabled) return;
+    showBanner('login', message);
+  }
+
+  function hideBanner() {
+    var banner = $('banner');
+    if (banner) banner.hidden = true;
+  }
+
+  /* ================= 概览 ================= */
+  function ovCard(label, value, hint, ratio, extraClass) {
+    var card = el('div', 'ov-card' + (extraClass ? ' ' + extraClass : ''));
+    card.append(el('span', 'label', label));
+    card.append(el('strong', 'value', value));
+    var sub = el('div', 'sub');
+    sub.append(el('span', '', hint));
+    card.append(sub);
+    var track = el('div', 'track');
+    var fill = el('i');
+    fill.style.width = clamp(num(ratio), 0, 1) * 100 + '%';
+    track.append(fill);
+    card.append(track);
+    return card;
+  }
+
+  function renderOverview(error) {
+    var grid = $('overviewGrid');
+    if (!grid) return;
+    grid.replaceChildren();
+    var overview = state.overview || {};
+    var counts = overview.counts || {};
+    var caps = overview.caps || {};
+    var stats = overview.stats || {};
+    var total = 0;
+    KINDS.forEach(function (kind) { total += num(counts[kind.key]); });
+    KINDS.forEach(function (kind) {
+      var value = num(counts[kind.key]);
+      var share = total > 0 ? value / total : 0;
+      var cap = num(caps[kind.key]);
+      var hint = '占 ' + pct(share) + (cap > 0 ? ' · 上限 ' + fmtInt(cap) : '');
+      grid.append(ovCard(kind.label, fmtInt(value), hint, share));
+    });
+    var active = num(counts.active);
+    var archived = num(counts.archived);
+    var totalLife = active + archived;
+    grid.append(ovCard('活跃 / 归档', fmtInt(active) + ' / ' + fmtInt(archived), '活跃占 ' + pct(totalLife > 0 ? active / totalLife : 0), totalLife > 0 ? active / totalLife : 0, 'duo'));
+    var working = num(counts.working);
+    grid.append(ovCard('工作记忆', fmtInt(working), '占全部 ' + pct(total > 0 ? working / total : 0), total > 0 ? working / total : 0));
+    var todayWrites = num(stats.todayWrites);
+    grid.append(ovCard('今日写入', fmtInt(todayWrites), '今日情节 ' + fmtInt(stats.todayEpisodes), total > 0 ? todayWrites / total : 0));
+    if (error) {
+      grid.append(el('p', 'hint', '概览加载失败：' + error));
+    }
+    renderChrome();
+    renderHealthFromOverview();
+  }
+
+  /* ================= 概览加载 ================= */
+  function loadOverview() {
+    return api('/api/memory-brain/overview', { timeoutMs: 15000 }).then(function (data) {
+      state.overview = data;
+      state.disabled = false;
+      renderOverview();
+      renderChrome();
+    }, function (error) {
+      if (error && error.code === 'disabled') { enterDisabled(); return; }
+      state.overview = null;
+      renderOverview();
+      renderChrome();
+      throw error;
+    });
+  }
+
+  /* ================= 列表 ================= */
+  function listQuery() {
+    var params = new URLSearchParams();
+    if (state.list.kind) params.set('kind', state.list.kind);
+    if (state.list.status) params.set('status', state.list.status);
+    params.set('limit', String(PAGE_LIMIT));
+    params.set('offset', String(state.list.offset));
+    return params.toString();
+  }
+
+  function loadList(retried) {
+    return api('/api/memory-brain/list?' + listQuery()).then(function (data) {
+      var items = Array.isArray(data.items) ? data.items : [];
+      state.list.items = items;
+      state.list.total = num(data.total);
+      state.listError = '';
+      if (!items.length && state.list.offset > 0 && !retried) {
+        state.list.offset = Math.max(0, state.list.offset - PAGE_LIMIT);
+        return loadList(true);
+      }
+      renderList();
+    }, function (error) {
+      state.list.items = [];
+      state.listError = error.message;
+      renderList(error.message);
+      throw error;
+    });
+  }
+
+  function renderList(error) {
+    var body = $('listBody');
+    var meta = $('listMeta');
+    var pageInfo = $('pageInfo');
+    if (!body) return;
+    var message = error === undefined ? state.listError : error;
+    body.replaceChildren();
+    var items = state.list.items;
+    if (!items.length) {
+      var row = el('tr');
+      var cell = el('td');
+      cell.colSpan = 7;
+      cell.append(message ? emptyBlock('加载失败', message) : emptyBlock('暂无记忆', state.disabled ? '记忆大脑未开启。' : (state.emptyReason || '这个筛选条件下还没有记忆。')));
+      row.append(cell);
+      body.append(row);
+    } else {
+      items.forEach(function (item) { body.append(listRow(item)); });
+    }
+    var total = state.list.total;
+    var page = Math.floor(state.list.offset / PAGE_LIMIT) + 1;
+    var pages = Math.max(1, Math.ceil(total / PAGE_LIMIT));
+    if (meta) meta.textContent = '共 ' + fmtInt(total) + ' 条 · 每页 ' + PAGE_LIMIT + ' 条';
+    if (pageInfo) pageInfo.textContent = '第 ' + page + ' / ' + pages + ' 页';
+    var prev = $('listPrev');
+    var next = $('listNext');
+    if (prev) prev.disabled = state.list.offset <= 0 || state.busy;
+    if (next) next.disabled = state.list.offset + PAGE_LIMIT >= total || state.busy;
+  }
+
+  function listRow(item) {
+    var row = el('tr');
+    row.dataset.id = String(item.id === undefined || item.id === null ? '' : item.id);
+    var textCell = el('td', 'txt');
+    textCell.append(el('div', 'row-text', String(item.text || '（空）')));
+    var subBits = [];
+    if (item.source) subBits.push('来源 ' + item.source);
+    if (item.visibility) subBits.push('可见性 ' + item.visibility);
+    if (item.valence !== undefined && item.valence !== null) subBits.push('情绪 ' + fmtFloat(item.valence, 2));
+    if (item.lastAccess) subBits.push('上次访问 ' + fmtTime(item.lastAccess));
+    if (item.archivedAt) subBits.push('归档于 ' + fmtTime(item.archivedAt));
+    textCell.append(el('div', 'row-sub', subBits.join(' · ') || '—'));
+    textCell.querySelector('.row-text').title = String(item.text || '');
+    row.append(textCell);
+
+    var kindCell = el('td');
+    kindCell.append(kindPill(item.kind));
+    row.append(kindCell);
+    row.append(el('td', 'num', fmtFloat(item.importance, 2)));
+    row.append(el('td', 'num', fmtInt(item.accessCount)));
+    var statusCell = el('td');
+    statusCell.append(statusPill(item.status));
+    row.append(statusCell);
+    row.append(el('td', 'num', fmtTime(item.createdAt)));
+
+    var opsCell = el('td');
+    var ops = el('div', 'ops-row');
+    var archived = String(item.status || '') === 'archived';
+    ops.append(rowButton(archived ? '恢复' : '归档', archived ? 'restore' : 'archive', item.id, false));
+    ops.append(rowButton('删除', 'delete', item.id, true));
+    opsCell.append(ops);
+    row.append(opsCell);
+    return row;
+  }
+
+  function rowButton(label, act, id, danger) {
+    var button = el('button', 'small' + (danger ? ' danger' : ''), label);
+    button.type = 'button';
+    button.dataset.act = act;
+    button.dataset.id = String(id === undefined || id === null ? '' : id);
+    return button;
+  }
+
+  function runRowAction(action, id, button) {
+    var confirmOptions = null;
+    if (action === 'delete') {
+      confirmOptions = { title: '删除记忆', message: '删除后不可恢复。\n确认删除这条记忆（id=' + id + '）？', confirmText: '删除', danger: true };
+    }
+    var start = confirmOptions ? askConfirm(confirmOptions) : Promise.resolve(true);
+    return start.then(function (ok) {
+      if (!ok) return undefined;
+      if (button) button.disabled = true;
+      return sendAction(action, { id: id }, action === 'archive' ? '已归档' : action === 'restore' ? '已恢复' : '已删除')
+        .catch(function (error) { handleError(error); })
+        .then(function () { if (button) button.disabled = false; });
+    });
+  }
+
+  function sendAction(action, payload, okText) {
+    var body = { action: action };
+    if (payload && payload.id !== undefined && payload.id !== null && payload.id !== '') body.id = payload.id;
+    if (payload && Array.isArray(payload.ids)) body.ids = payload.ids;
+    return api('/api/memory-brain/action', { method: 'POST', body: body, timeoutMs: 60000 }).then(function (data) {
+      var changed = num(data.changed);
+      toast(okText + (changed > 0 ? ' ' + fmtInt(changed) + ' 条' : ''), 'ok');
+      return Promise.allSettled([loadOverview(), loadList(), loadHealth()]).then(function () {
+        return data;
+      });
+    });
+  }
+
+  /* ================= 检索 ================= */
+  function renderSearch(error) {
+    var box = $('searchResults');
+    var summary = $('searchSummary');
+    if (!box) return;
+    box.replaceChildren();
+    if (error) {
+      if (summary) summary.textContent = '检索失败';
+      box.append(emptyBlock('检索失败', error));
+      return;
+    }
+    if (!state.searchQuery) {
+      if (summary) summary.textContent = '输入关键词，看五段权重怎么给分';
+      box.append(emptyBlock('还没有检索', '输入关键词后按回车，结果里会显示 semantic / keyword / graph / importance / freshness 五段分数。'));
+      return;
+    }
+    var hits = state.hits;
+    if (summary) summary.textContent = '命中 ' + fmtInt(hits.length) + ' 条';
+    if (!hits.length) {
+      box.append(emptyBlock('没有命中', '换个关键词试试；也可能是记忆库里还没有相关内容。'));
+      return;
+    }
+    hits.forEach(function (hit) { box.append(hitCard(hit)); });
+  }
+
+  function hitCard(hit) {
+    var card = el('article', 'hit');
+    var left = el('div');
+    var meta = el('div', 'meta');
+    meta.append(kindPill(hit.kind));
+    meta.append(el('span', 'score', '总分 ' + fmtFloat(hit.score, 3)));
+    if (hit.id !== undefined && hit.id !== null) meta.append(el('span', '', 'id ' + hit.id));
+    left.append(meta);
+    left.append(el('p', 'text', String(hit.text || '（空）')));
+    card.append(left);
+
+    var right = el('div', 'parts');
+    var parts = hit.parts || {};
+    var values = PART_KEYS.map(function (part) { return Math.max(0, num(parts[part.key])); });
+    var max = values.reduce(function (acc, value) { return Math.max(acc, value); }, 0) || 1;
+    PART_KEYS.forEach(function (part, index) {
+      var value = values[index];
+      var row = el('div', 'part ' + part.key);
+      row.append(el('span', '', part.label));
+      var track = el('div', 'track');
+      var fill = el('i');
+      var ratio = max > 0 ? value / max : 0;
+      fill.style.width = ratio <= 0 ? '0%' : Math.max(2, ratio * 100).toFixed(1) + '%';
+      track.append(fill);
+      row.append(track);
+      row.append(el('span', 'val', fmtFloat(value, 2)));
+      right.append(row);
+    });
+    card.append(right);
+    return card;
+  }
+
+  function runSearch(event) {
+    if (event) event.preventDefault();
+    var input = $('searchQuery');
+    var query = input ? input.value.trim() : '';
+    var chatType = $('searchChatType') ? $('searchChatType').value : '';
+    var submit = $('searchSubmit');
+    state.searchQuery = query;
+    if (!query) {
+      state.hits = [];
+      renderSearch();
+      return Promise.resolve();
+    }
+    if (submit) submit.disabled = true;
+    var params = new URLSearchParams();
+    params.set('q', query);
+    if (chatType) params.set('chatType', chatType);
+    return api('/api/memory-brain/search?' + params.toString(), { timeoutMs: 25000 }).then(function (data) {
+      state.hits = Array.isArray(data.items) ? data.items : [];
+      renderSearch();
+    }, function (error) {
+      state.hits = [];
+      renderSearch(error.message);
+      handleError(error);
+    }).then(function () {
+      if (submit) submit.disabled = false;
+    });
+  }
+
+  /* ================= 体检 ================= */
+  function loadHealth() {
+    return api('/api/memory-brain/health', { timeoutMs: 20000 }).then(function (data) {
+      state.health = data;
+      state.healthError = '';
+      renderHealth();
+    }, function (error) {
+      state.health = null;
+      state.healthError = error.message;
+      renderHealth(error.message);
+      throw error;
+    });
+  }
+
+  function healthCounts() {
+    var overview = state.overview || {};
+    return overview.health || {};
+  }
+
+  function renderHealthFromOverview() {
+    if (!state.health) renderHealth();
+  }
+
+  function renderHealth(error) {
+    var grid = $('healthGrid');
+    var note = $('healthNote');
+    if (!grid) return;
+    grid.replaceChildren();
+    var message = error === undefined ? state.healthError : error;
+    var data = state.health || {};
+    var items = data.items || (state.overview && state.overview.health) || {};
+    var sample = data.sample || {};
+    var totalIssues = 0;
+    HEALTH_KEYS.forEach(function (key) {
+      var count = num(items[key.key]);
+      totalIssues += count;
+      var box = el('div', 'health-item');
+      var head = el('header');
+      head.append(el('span', '', key.label));
+      var value = el('strong', count > 0 ? 'bad' : '', fmtInt(count));
+      head.append(value);
+      box.append(head);
+      var list = el('ul');
+      var samples = Array.isArray(sample[key.key]) ? sample[key.key].slice(0, 3) : [];
+      if (!samples.length) {
+        list.append(el('li', '', '无样本'));
+      } else {
+        samples.forEach(function (entry) { list.append(el('li', '', describeSample(entry))); });
+      }
+      box.append(list);
+      if (message) box.append(el('div', 'row-sub', '加载失败'));
+      grid.append(box);
+    });
+    var fix = $('healthFix');
+    if (fix) fix.disabled = state.disabled || state.busy || totalIssues <= 0 || !!message;
+    if (note) note.textContent = message ? '体检加载失败：' + message : (totalIssues > 0 ? '共 ' + fmtInt(totalIssues) + ' 个问题，可尝试一键修复' : (state.emptyReason || '未发现结构性问题'));
+  }
+
+  /* ================= 评估 ================= */
+  function renderEval(error) {
+    var box = $('evalMetrics');
+    var meta = $('evalMeta');
+    if (!box) return;
+    box.replaceChildren();
+    if (error) {
+      box.append(emptyBlock('评估失败', error));
+      if (meta) meta.textContent = '评估失败';
+      return;
+    }
+    var data = state.evaluation;
+    if (!data) {
+      box.append(emptyBlock('还没跑过评估', '点「跑一次评估」会用内置用例回放检索，显示 recall@1 / recall@3 / MRR / p50 延迟。'));
+      if (meta) meta.textContent = '还没跑过评估';
+      return;
+    }
+    function ratioText(value) {
+      var n = num(value);
+      return n <= 1 ? (n * 100).toFixed(1) + '%' : n.toFixed(1) + '%';
+    }
+    var tiles = [
+      { label: 'recall@1', value: ratioText(data.recallAt1), sub: '命中率' },
+      { label: 'recall@3', value: ratioText(data.recallAt3), sub: '前三命中' },
+      { label: 'MRR', value: fmtFloat(data.mrr, 3), sub: '平均倒数排名' },
+      { label: 'p50 延迟', value: fmtFloat(data.p50Ms, 1) + ' ms', sub: '中位耗时' },
+      { label: '用例数', value: fmtInt(data.caseCount), sub: '本次回放' }
+    ];
+    tiles.forEach(function (tile) {
+      var cell = el('div', 'metric-tile');
+      cell.append(el('span', '', tile.label));
+      cell.append(el('strong', '', tile.value));
+      cell.append(el('small', '', tile.sub));
+      box.append(cell);
+    });
+    if (meta) meta.textContent = '上次评估：' + fmtInt(data.caseCount) + ' 个用例';
+  }
+
+  function runEvaluation() {
+    var button = $('evalRun');
+    var meta = $('evalMeta');
+    if (button) button.disabled = true;
+    if (meta) meta.textContent = '正在回放用例…';
+    return api('/api/memory-brain/eval?run=1', { timeoutMs: 120000 }).then(function (data) {
+      state.evaluation = data;
+      renderEval();
+      toast('评估完成', 'ok');
+    }, function (error) {
+      state.evaluation = null;
+      renderEval(error.message);
+      handleError(error);
+    }).then(function () {
+      if (button) button.disabled = false;
+    });
+  }
+
+  /* ================= 治理 ================= */
+  function runGovernance(action) {
+    var spec = GOVERN[action];
+    if (!spec) return Promise.resolve();
+    return askConfirm({ title: spec.label, message: spec.message, confirmText: spec.label, danger: spec.danger }).then(function (ok) {
+      if (!ok) return undefined;
+      var button = document.querySelector('[data-govern="' + action + '"]');
+      if (button) button.disabled = true;
+      return api('/api/memory-brain/action', { method: 'POST', body: { action: action }, timeoutMs: 120000 }).then(function (data) {
+        var changed = num(data.changed);
+        toast(spec.ok + (changed > 0 ? ' ' + fmtInt(changed) + ' 条' : ''), 'ok');
+        var tasks = [loadOverview(), loadList(), loadHealth()];
+        if (action === 'merge' || action === 'reindex' || action === 'purge' || action === 'consolidate') tasks.push(loadGraph());
+        return Promise.allSettled(tasks);
+      }, function (error) {
+        handleError(error);
+      }).then(function () {
+        if (button) button.disabled = false;
+      });
+    });
+  }
+
+  /* ================= 图谱 ================= */
+  var graphView = {
+    nodes: [],
+    edges: [],
+    alpha: 0,
+    frames: 0,
+    raf: 0,
+    width: 0,
+    height: 0,
+    hover: null,
+    ctx: null
+  };
+
+  function graphColors() {
+    var style = getComputedStyle(document.documentElement);
+    var colors = [];
+    for (var i = 1; i <= 6; i += 1) {
+      var value = style.getPropertyValue('--graph-' + i).trim();
+      if (value) colors.push(value);
+    }
+    return colors.length ? colors : ['#4d6bfe'];
+  }
+
+  function typeColor(type, palette) {
+    var text = String(type || 'unknown');
+    var hash = 0;
+    for (var i = 0; i < text.length; i += 1) hash = (hash * 31 + text.charCodeAt(i)) % 9973;
+    return palette[hash % palette.length];
+  }
+
+  function graphNodeIndex() {
+    var map = new Map();
+    graphView.nodes.forEach(function (node) { map.set(String(node.id), node); });
+    return map;
+  }
+
+  function buildGraph() {
+    var canvas = $('graphCanvas');
+    var wrap = $('graphWrap');
+    if (!canvas || !wrap) return;
+    var palette = graphColors();
+    var rect = wrap.getBoundingClientRect();
+    var width = Math.max(320, Math.round(rect.width));
+    var height = Math.max(220, Math.round(rect.height || 420));
+    graphView.width = width;
+    graphView.height = height;
+    var rawNodes = Array.isArray(state.graphNodes) ? state.graphNodes : [];
+    var rawEdges = Array.isArray(state.graphEdges) ? state.graphEdges : [];
+    var seed = 20260411;
+    function random() {
+      seed = (seed * 1103515245 + 12345) % 2147483648;
+      return seed / 2147483648;
+    }
+    var cx = width / 2;
+    var cy = height / 2;
+    var count = rawNodes.length;
+    var nodes = rawNodes.map(function (raw, index) {
+      var angle = index * 2.399963229728653 + random() * 0.4;
+      var radius = Math.min(width, height) * 0.36 * Math.sqrt((index + 1) / Math.max(1, count)) + random() * 16;
+      var mentions = Math.max(0, num(raw.mentions));
+      return {
+        id: String(raw.id === undefined || raw.id === null ? index : raw.id),
+        name: String(raw.name || raw.id || '未命名'),
+        type: String(raw.type || 'unknown'),
+        mentions: mentions,
+        radius: clamp(5 + Math.sqrt(mentions) * 1.9, 5, 20),
+        x: cx + Math.cos(angle) * radius,
+        y: cy + Math.sin(angle) * radius,
+        vx: 0,
+        vy: 0,
+        color: typeColor(raw.type, palette)
+      };
+    });
+    var index = new Map();
+    nodes.forEach(function (node) { index.set(node.id, node); });
+    var edges = [];
+    rawEdges.forEach(function (raw) {
+      var source = index.get(String(raw.source));
+      var target = index.get(String(raw.target));
+      if (!source || !target || source === target) return;
+      edges.push({ a: source, b: target, weight: Math.max(0.2, num(raw.weight) || 1), relation: raw.relation || '' });
+    });
+    graphView.nodes = nodes;
+    graphView.edges = edges;
+    graphView.hover = null;
+    graphView.alpha = 1;
+    graphView.frames = 0;
+    renderGraphMeta();
+    renderGraphLegend(palette);
+    var empty = $('graphEmpty');
+    if (empty) empty.hidden = nodes.length > 0;
+    if (!nodes.length) {
+      clearCanvas();
+      return;
+    }
+    resizeCanvas();
+    if (graphView.raf) cancelAnimationFrame(graphView.raf);
+    graphView.raf = 0;
+    startGraph();
+  }
+
+  function resizeCanvas() {
+    var canvas = $('graphCanvas');
+    var wrap = $('graphWrap');
+    if (!canvas || !wrap) return;
+    var rect = wrap.getBoundingClientRect();
+    var width = Math.max(320, Math.round(rect.width));
+    var height = Math.max(220, Math.round(rect.height || 420));
+    var dpr = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
+    graphView.width = width;
+    graphView.height = height;
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    graphView.ctx = canvas.getContext('2d');
+    if (graphView.ctx) graphView.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    graphView.dpr = dpr;
+  }
+
+  function clearCanvas() {
+    var ctx = graphView.ctx;
+    if (!ctx) return;
+    ctx.clearRect(0, 0, graphView.width, graphView.height);
+  }
+
+  function startGraph() {
+    if (!graphView.nodes.length) return;
+    graphView.frames = 0;
+    graphView.alpha = 1;
+    if (graphView.raf) cancelAnimationFrame(graphView.raf);
+    graphView.raf = requestAnimationFrame(tickGraph);
+  }
+
+  function tickGraph() {
+    graphView.raf = 0;
+    if (!graphView.nodes.length) return;
+    stepGraph();
+    drawGraph();
+    graphView.frames += 1;
+    var moving = 0;
+    graphView.nodes.forEach(function (node) { moving += Math.abs(node.vx) + Math.abs(node.vy); });
+    moving /= graphView.nodes.length;
+    graphView.alpha *= 0.994;
+    if (graphView.frames < 900 && (moving > 0.35 || graphView.frames < 40) && graphView.alpha > 0.02) {
+      graphView.raf = requestAnimationFrame(tickGraph);
+    }
+  }
+
+  function stepGraph() {
+    var nodes = graphView.nodes;
+    var edges = graphView.edges;
+    var width = graphView.width || 600;
+    var height = graphView.height || 420;
+    var cx = width / 2;
+    var cy = height / 2;
+    var i;
+    var j;
+    for (i = 0; i < nodes.length; i += 1) {
+      var a = nodes[i];
+      for (j = i + 1; j < nodes.length; j += 1) {
+        var b = nodes[j];
+        var dx = b.x - a.x;
+        var dy = b.y - a.y;
+        var distSq = dx * dx + dy * dy;
+        if (distSq > 90000) continue;
+        if (distSq < 1) { dx = (i % 2 ? 1 : -1) * 0.7; dy = (j % 2 ? 1 : -1) * 0.7; distSq = 1; }
+        var dist = Math.sqrt(distSq);
+        var force = Math.min(9, 1400 / distSq);
+        var fx = (dx / dist) * force;
+        var fy = (dy / dist) * force;
+        a.vx -= fx;
+        a.vy -= fy;
+        b.vx += fx;
+        b.vy += fy;
+      }
+    }
+    edges.forEach(function (edge) {
+      var dx = edge.b.x - edge.a.x;
+      var dy = edge.b.y - edge.a.y;
+      var dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      var rest = 62 + edge.a.radius + edge.b.radius;
+      var strength = 0.012 * Math.min(3, Math.max(0.3, edge.weight));
+      var force = (dist - rest) * strength;
+      var fx = (dx / dist) * force;
+      var fy = (dy / dist) * force;
+      edge.a.vx += fx;
+      edge.a.vy += fy;
+      edge.b.vx -= fx;
+      edge.b.vy -= fy;
+    });
+    nodes.forEach(function (node) {
+      node.vx += (cx - node.x) * 0.0055;
+      node.vy += (cy - node.y) * 0.0055;
+      node.vx *= 0.86;
+      node.vy *= 0.86;
+      var speed = Math.sqrt(node.vx * node.vx + node.vy * node.vy);
+      if (speed > 14) {
+        node.vx *= 14 / speed;
+        node.vy *= 14 / speed;
+      }
+      node.x += node.vx;
+      node.y += node.vy;
+      var pad = node.radius + 6;
+      if (node.x < pad) { node.x = pad; node.vx = Math.abs(node.vx) * 0.4; }
+      if (node.x > width - pad) { node.x = width - pad; node.vx = -Math.abs(node.vx) * 0.4; }
+      if (node.y < pad) { node.y = pad; node.vy = Math.abs(node.vy) * 0.4; }
+      if (node.y > height - pad) { node.y = height - pad; node.vy = -Math.abs(node.vy) * 0.4; }
+    });
+  }
+
+  function drawGraph() {
+    var ctx = graphView.ctx;
+    if (!ctx) return;
+    var width = graphView.width;
+    var height = graphView.height;
+    ctx.clearRect(0, 0, width, height);
+    var palette = graphColors();
+    var edgeColor = palette[0];
+    ctx.save();
+    graphView.edges.forEach(function (edge) {
+      var weight = Math.min(3, Math.max(0.3, edge.weight));
+      ctx.beginPath();
+      ctx.moveTo(edge.a.x, edge.a.y);
+      ctx.lineTo(edge.b.x, edge.b.y);
+      ctx.strokeStyle = edgeColor;
+      ctx.globalAlpha = 0.1 + Math.min(0.35, weight * 0.08);
+      ctx.lineWidth = 0.7 + Math.min(1.8, weight * 0.5);
+      ctx.stroke();
+    });
+    ctx.globalAlpha = 1;
+    var hover = graphView.hover;
+    graphView.nodes.forEach(function (node) {
+      var active = hover && hover.id === node.id;
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, node.radius + (active ? 3 : 0), 0, Math.PI * 2);
+      ctx.fillStyle = node.color;
+      ctx.globalAlpha = active ? 1 : 0.92;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.lineWidth = active ? 2.4 : 1.2;
+      ctx.strokeStyle = active ? palette[0] : 'rgba(255,255,255,.55)';
+      ctx.stroke();
+    });
+    if (hover) {
+      ctx.font = '600 12px -apple-system,"Segoe UI","Microsoft YaHei",sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.fillStyle = 'rgba(0,0,0,.55)';
+      ctx.fillText(hover.name, hover.x + 1, hover.y - hover.radius - 8);
+      ctx.fillStyle = '#fff';
+      ctx.fillText(hover.name, hover.x, hover.y - hover.radius - 9);
+    }
+    ctx.restore();
+  }
+
+  function renderGraphMeta() {
+    var meta = $('graphMeta');
+    if (!meta) return;
+    if (!graphView.nodes.length) { meta.textContent = '节点大小 = 提及次数'; return; }
+    meta.textContent = '节点 ' + fmtInt(graphView.nodes.length) + ' · 关系 ' + fmtInt(graphView.edges.length);
+  }
+
+  function renderGraphLegend(palette) {
+    var box = $('graphLegend');
+    if (!box) return;
+    box.replaceChildren();
+    var seen = new Map();
+    graphView.nodes.forEach(function (node) {
+      if (!seen.has(node.type)) seen.set(node.type, node.color);
+    });
+    seen.forEach(function (color, type) {
+      var item = el('span');
+      var dot = el('i');
+      dot.style.background = color;
+      item.append(dot);
+      item.append(document.createTextNode(String(type)));
+      box.append(item);
+    });
+  }
+
+  function loadGraph() {
+    return api('/api/memory-brain/graph?limit=' + GRAPH_LIMIT, { timeoutMs: 20000 }).then(function (data) {
+      state.graphNodes = Array.isArray(data.nodes) ? data.nodes : [];
+      state.graphEdges = Array.isArray(data.edges) ? data.edges : [];
+      buildGraph();
+    }, function (error) {
+      state.graphNodes = [];
+      state.graphEdges = [];
+      buildGraph();
+      var meta = $('graphMeta');
+      if (meta) meta.textContent = '图谱加载失败：' + error.message;
+      var empty = $('graphEmpty');
+      if (empty && empty.firstElementChild) {
+        empty.firstElementChild.replaceChildren(el('b', '', '图谱加载失败'), document.createTextNode(error.message));
+      }
+      throw error;
+    });
+  }
+
+  function nodeAt(canvasX, canvasY) {
+    var best = null;
+    var bestDist = Infinity;
+    graphView.nodes.forEach(function (node) {
+      var dx = node.x - canvasX;
+      var dy = node.y - canvasY;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist <= node.radius + 6 && dist < bestDist) { best = node; bestDist = dist; }
+    });
+    return best;
+  }
+
+  function handleGraphMove(event) {
+    var canvas = $('graphCanvas');
+    if (!canvas || !graphView.nodes.length) return;
+    var rect = canvas.getBoundingClientRect();
+    var x = event.clientX - rect.left;
+    var y = event.clientY - rect.top;
+    var node = nodeAt(x, y);
+    var tip = $('graphTip');
+    graphView.hover = node;
+    if (node) {
+      canvas.style.cursor = 'pointer';
+      if (tip) {
+        tip.textContent = node.name + ' · ' + node.type + ' · 提及 ' + node.mentions;
+        tip.style.left = clamp(node.x, 20, graphView.width - 20) + 'px';
+        tip.style.top = clamp(node.y, 20, graphView.height) + 'px';
+        tip.hidden = false;
+      }
+      drawGraph();
+    } else {
+      canvas.style.cursor = 'crosshair';
+      if (tip) tip.hidden = true;
+      drawGraph();
+    }
+  }
+
+  function handleGraphLeave() {
+    graphView.hover = null;
+    var tip = $('graphTip');
+    if (tip) tip.hidden = true;
+    drawGraph();
+  }
+
+  /* ================= 统一错误 / 空态 ================= */
+  function handleError(error) {
+    if (!error) return;
+    if (error.code === 'disabled') {
+      enterDisabled();
+      return;
+    }
+    if (error.code === 'unauthorized') {
+      clearDataForLogin();
+      return;
+    }
+    toast(error.message || String(error), 'error');
+  }
+
+  function enterDisabled() {
+    state.disabled = true;
+    state.overview = null;
+    state.list.items = [];
+    state.list.total = 0;
+    state.listError = '';
+    state.healthError = '';
+    state.emptyReason = '记忆大脑未开启，暂无体检数据';
+    state.hits = [];
+    state.health = null;
+    state.evaluation = null;
+    state.graphNodes = [];
+    state.graphEdges = [];
+    showBanner('disabled');
+    renderChrome();
+    renderOverview();
+    renderList();
+    renderSearch();
+    renderHealth();
+    renderEval();
+    buildGraph();
+    setActionsEnabled(false);
+    var note = $('healthNote');
+    if (note) note.textContent = '记忆大脑未开启，暂无体检数据';
+    var meta = $('graphMeta');
+    if (meta) meta.textContent = '记忆大脑未开启';
+    var empty = $('graphEmpty');
+    if (empty && empty.firstElementChild) {
+      empty.firstElementChild.replaceChildren(el('b', '', '记忆大脑未开启'), document.createTextNode('开启后这里会显示实体关系图。'));
+    }
+  }
+
+  function clearDataForLogin() {
+    state.overview = null;
+    state.health = null;
+    state.evaluation = null;
+    state.hits = [];
+    state.list.items = [];
+    state.list.total = 0;
+    state.listError = '';
+    state.healthError = '';
+    state.emptyReason = '先在控制台登录后查看记忆数据。';
+    state.graphNodes = [];
+    state.graphEdges = [];
+    renderOverview();
+    renderList();
+    renderSearch();
+    renderHealth();
+    renderEval();
+    buildGraph();
+    setActionsEnabled(false);
+    var note = $('healthNote');
+    if (note) note.textContent = '先在控制台登录后查看体检数据';
+  }
+
+  function setActionsEnabled(enabled) {
+    ['searchSubmit', 'searchQuery', 'searchChatType', 'listKind', 'listStatus', 'listReload', 'listPrev', 'listNext', 'healthFix', 'evalRun'].forEach(function (id) {
+      var node = $(id);
+      if (node) node.disabled = !enabled;
+    });
+    document.querySelectorAll('[data-govern]').forEach(function (button) { button.disabled = !enabled; });
+  }
+
+  function resetForEmpty(reason) {
+    state.overview = null;
+    state.health = null;
+    state.evaluation = null;
+    state.hits = [];
+    state.list.items = [];
+    state.list.total = 0;
+    state.listError = '';
+    state.healthError = '';
+    state.emptyReason = reason || '';
+    state.graphNodes = [];
+    state.graphEdges = [];
+    renderOverview();
+    renderList();
+    renderSearch();
+    renderHealth();
+    renderEval();
+    buildGraph();
+    var healthNote = $('healthNote');
+    if (healthNote) healthNote.textContent = reason || '—';
+    setActionsEnabled(false);
+    var meta = $('graphMeta');
+    if (meta) meta.textContent = '—';
+    var empty = $('graphEmpty');
+    if (empty && empty.firstElementChild) {
+      empty.firstElementChild.replaceChildren(el('b', '', '暂无图谱'), document.createTextNode(reason));
+    }
+  }
+
+  /* ================= 刷新 ================= */
+  function setRefreshing(busy) {
+    state.busy = busy;
+    var button = $('refreshAll');
+    if (button) {
+      button.disabled = busy;
+      button.textContent = busy ? '…' : '↻';
+      button.setAttribute('aria-busy', busy ? 'true' : 'false');
+    }
+    renderList();
+    renderHealth();
+  }
+
+  function refreshAll(options) {
+    var opts = options || {};
+    if (!state.token) {
+      showBanner('login');
+      renderChrome();
+      resetForEmpty('先在控制台登录后查看记忆数据。');
+      setActionsEnabled(false);
+      return Promise.resolve();
+    }
+    state.emptyReason = '';
+    setRefreshing(true);
+    var failures = [];
+    function run(task) {
+      return task().catch(function (error) { failures.push(error); });
+    }
+    return run(loadOverview).then(function () {
+      if (state.disabled) return undefined;
+      return Promise.all([run(loadList), run(loadHealth), run(loadGraph)]);
+    }).then(function () {
+      renderChrome();
+      if (state.disabled) {
+        setActionsEnabled(false);
+        return;
+      }
+      hideBanner();
+      setActionsEnabled(true);
+      var real = failures.filter(function (error) { return error && error.code !== 'disabled'; });
+      if (real.length) {
+        var first = real[0];
+        toast(real.length > 1 ? first.message + '（另有 ' + (real.length - 1) + ' 个区块失败）' : first.message, 'error');
+      } else if (opts.announce) {
+        toast('已刷新', 'ok');
+      }
+    }).then(function () {
+      setRefreshing(false);
+    });
+  }
+
+  /* ================= 主题 ================= */
+  function applyTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+    var button = $('themeToggle');
+    if (button) {
+      button.textContent = theme === 'dark' ? '☀' : '☾';
+      button.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+    }
+    if (graphView.nodes.length) drawGraph();
+  }
+
+  /* ================= 初始化 ================= */
+  function wireEvents() {
+    var refresh = $('refreshAll');
+    if (refresh) refresh.addEventListener('click', function () { refreshAll({ announce: true }); });
+    var toggle = $('themeToggle');
+    if (toggle) toggle.addEventListener('click', function () {
+      var next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      try { localStorage.setItem('qq-console-theme', next); } catch (error) {}
+      applyTheme(next);
+    });
+
+    var searchForm = $('searchForm');
+    if (searchForm) searchForm.addEventListener('submit', runSearch);
+
+    var listKind = $('listKind');
+    if (listKind) listKind.addEventListener('change', function () {
+      state.list.kind = listKind.value;
+      state.list.offset = 0;
+      loadList().catch(handleError);
+    });
+    var listStatus = $('listStatus');
+    if (listStatus) listStatus.addEventListener('change', function () {
+      state.list.status = listStatus.value;
+      state.list.offset = 0;
+      loadList().catch(handleError);
+    });
+    var listReload = $('listReload');
+    if (listReload) listReload.addEventListener('click', function () { loadList().catch(handleError); });
+    var listPrev = $('listPrev');
+    if (listPrev) listPrev.addEventListener('click', function () {
+      state.list.offset = Math.max(0, state.list.offset - PAGE_LIMIT);
+      loadList().catch(handleError);
+    });
+    var listNext = $('listNext');
+    if (listNext) listNext.addEventListener('click', function () {
+      state.list.offset += PAGE_LIMIT;
+      loadList().catch(handleError);
+    });
+    var body = $('listBody');
+    if (body) body.addEventListener('click', function (event) {
+      var button = event.target && event.target.closest ? event.target.closest('button[data-act]') : null;
+      if (!button) return;
+      runRowAction(button.dataset.act, button.dataset.id, button);
+    });
+
+    var healthFix = $('healthFix');
+    if (healthFix) healthFix.addEventListener('click', function () {
+      askConfirm({ title: '一键修复', message: '将修复重复 / 孤儿 / 僵尸 / 冲突的记忆结构问题。\n修复会合并或清理部分条目，确认继续？', confirmText: '开始修复' }).then(function (ok) {
+        if (!ok) return undefined;
+        return api('/api/memory-brain/action', { method: 'POST', body: { action: 'health-fix' }, timeoutMs: 120000 }).then(function (data) {
+          toast('修复完成' + (num(data.changed) > 0 ? ' ' + fmtInt(data.changed) + ' 条' : ''), 'ok');
+          return Promise.allSettled([loadOverview(), loadHealth(), loadList()]);
+        }, function (error) { handleError(error); });
+      });
+    });
+
+    var evalRun = $('evalRun');
+    if (evalRun) evalRun.addEventListener('click', function () { runEvaluation(); });
+
+    document.querySelectorAll('[data-govern]').forEach(function (button) {
+      button.addEventListener('click', function () { runGovernance(button.dataset.govern); });
+    });
+
+    var confirmOk = $('confirmOk');
+    if (confirmOk) confirmOk.addEventListener('click', function () { closeConfirm(true); });
+    var confirmCancel = $('confirmCancel');
+    if (confirmCancel) confirmCancel.addEventListener('click', function () { closeConfirm(false); });
+    var overlay = $('confirmOverlay');
+    if (overlay) overlay.addEventListener('click', function (event) { if (event.target === overlay) closeConfirm(false); });
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && overlay && !overlay.hidden) closeConfirm(false);
+    });
+
+    var canvas = $('graphCanvas');
+    if (canvas) {
+      canvas.addEventListener('mousemove', handleGraphMove);
+      canvas.addEventListener('mouseleave', handleGraphLeave);
+    }
+
+    var resizeTimer = 0;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () {
+        if (!graphView.nodes.length) { resizeCanvas(); clearCanvas(); return; }
+        resizeCanvas();
+        graphView.nodes.forEach(function (node) {
+          node.x = clamp(node.x, node.radius + 6, graphView.width - node.radius - 6);
+          node.y = clamp(node.y, node.radius + 6, graphView.height - node.radius - 6);
+        });
+        startGraph();
+      }, 180);
+    });
+  }
+
+  function boot() {
+    try {
+      var queryToken = new URLSearchParams(location.search).get('token');
+      if (queryToken) {
+        localStorage.setItem(TOKEN_KEY, queryToken);
+        history.replaceState({}, '', location.pathname + location.hash);
+      }
+    } catch (error) {}
+    state.token = readToken();
+    applyTheme(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
+    wireEvents();
+    resizeCanvas();
+    renderOverview();
+    renderList();
+    renderSearch();
+    renderHealth();
+    renderEval();
+    renderChrome();
+    if (!state.token) {
+      showBanner('login');
+      resetForEmpty('先在控制台登录后查看记忆数据。');
+      return;
+    }
+    refreshAll();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+</script>
+</body>
+</html>
